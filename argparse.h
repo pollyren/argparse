@@ -213,7 +213,13 @@ argparse_error_t argparse_init(argument_parser_t *parser, int argc, char **argv,
  * @param arg Pointer to the argument to add
  * @return An `argparse_error_t` indicating success or failure
  *
- * @note The argument should be initialised.
+ * @note The argument should be initialised. The lifetime of `*arg` must also
+ * extend at least until `argparse_parse_args` is called. The parser retains a
+ * pointer to `*arg`, so having `*arg` go out-of-scope when the arguments are
+ * parsed can lead to undefined behaviour. This means that if the arguments are
+ * created in a different function from the one where `argparse_parse_args` is
+ * called, the user is responsible for ensuring that `arg` is correctly
+ * dynamically allocated.
  */
 argparse_error_t argparse_add_argument(argument_parser_t *parser,
                                        argparse_arg_t *arg);
@@ -226,7 +232,10 @@ argparse_error_t argparse_add_argument(argument_parser_t *parser,
  * @param num_args The number of arguments in args
  * @return An `argparse_error_t` indicating success or failure
  *
- * @note All arguments should be initialised.
+ * @note All arguments should be initialised. The lifetime of each argument in 
+ * `args` must also extend at least until `argparse_parse_args` is called, as 
+ * the parser retains a pointer to each argument. See function comment for
+ * `argparse_add_argument` for additional note.
  */
 argparse_error_t argparse_add_arguments(argument_parser_t *parser,
                                         argparse_arg_t *args, size_t num_args);
@@ -237,7 +246,9 @@ argparse_error_t argparse_add_arguments(argument_parser_t *parser,
  * @param parser Pointer to the parser
  * @return An `argparse_error_t` indicating success or failure
  *
- * @note The arguments should already be added to the parser.
+ * @note The arguments should already be added to the parser. The parser and
+ * all the arguments that have been added to the parser must also be in scope
+ * when this function is called to avoid undefined behaviour.
  */
 argparse_error_t argparse_parse_args(argument_parser_t *parser);
 
@@ -312,6 +323,24 @@ void argparse_check_error_and_exit(argparse_error_t error);
                       .next_ = NULL,                                           \
                       .count_ = 0,                                             \
                       __VA_ARGS__})
+
+/**
+ * @brief Initialises an already allocated argparse argument
+ * @param ptr Pointer to memory allocated for an `argparse_arg_t` 
+ * @param type Argument type (must be INT, FLOAT, BOOL or STRING)
+ * @param ... Additional `argparse_arg_t` fields
+ *
+ * @note The pointer `ptr` must not be NULL and should point to memory allocated
+ * to hold an `argparse_arg_t`. All the fields of the argument, aside from 
+ * type_, next_ and count_, must be initialised in the varadic args.
+ */
+#define ARGPARSE_ARG_INIT(ptr, type, ...)                                      \
+    do {                                                                       \
+        *(ptr) = (argparse_arg_t){.type_ = ARGPARSE_##type##_TYPE,             \
+                                  .next_ = NULL,                               \
+                                  .count_ = 0,                                 \
+                                  __VA_ARGS__};                                \
+    } while (0)
 
 /********************* POSITIONAL ARGUMENT MACROS *********************/
 
