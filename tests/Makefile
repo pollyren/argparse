@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -I.. -lcriterion
+CFLAGS = -Wall -Wextra -I.. -lcriterion -Wimplicit-fallthrough
 SRC = ../argparse.c test_argparse.c
 TARGET = test_argparse
 
