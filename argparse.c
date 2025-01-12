@@ -88,7 +88,7 @@
         if (error.error_val) {                                                 \
             return error;                                                      \
         }                                                                      \
-    } while (0);
+    } while (0)
 
 /*
  * Converts a lowercase letter to uppercase
@@ -322,6 +322,7 @@ argparse_error_t argparse_add_argument(argument_parser_t *parser,
         if (arg->required_) {
             return ARGPARSE_UNSUPPORTED_REQUIRE_ERROR(arg->name_, arg->flag_);
         }
+        __attribute__((fallthrough));
     case ARGPARSE_STORE_ACTION:
         if (!bool_action && arg->type_ == ARGPARSE_BOOL_TYPE) {
             return ARGPARSE_UNSUPPORTED_ACTION_ERROR(
