@@ -8,8 +8,9 @@
 - Support for positional arguments and options
 - Supports flag-based, long-form and grouped short options
 - Provides easy-to-use macros for defining arguments
-- Allows customisable help messages for arguments
+- Built-in `-h`/`--help` options that automatically generates and prints a customisable usage message
 - Ability to enforce required arguments
+- Enables predefined choices for arguments to restrict values to a specified set
 - Validates arguments and returns errors for invalid arguments
 - Compatible with C++
 
@@ -72,6 +73,12 @@ argparse_add_arguments(&parser, args, 4);
 The `argparse_parse_args` function runs the parser and updates the respective variables with the extracted data:
 ```
 argparse_parse_args(&parser);
+```
+
+#### Displaying usage message
+The `-h` and `--help` options are built-in; when either option is encountered during parsing, a usage message is automatically generated and printed. This usage message provides information on all the defined options and positional arguments, their flags and names, a brief user-provided description, whether the argument is required, and the valid choices for the argument. The `argparse_print_help` function also displays the usage message without needing to parse any `-h` or `--help` arguments:
+```
+argparse_print_help(&parser);
 ```
 
 #### Running tests
