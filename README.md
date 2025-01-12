@@ -59,7 +59,12 @@ argparse_add_argument(&parser, &arg4);
 
 The `argparse_add_arguments` function can be used to combine the addition of multiple arguments:
 ```
-argparse_arg_t *args[] = {&arg1, &arg2, &arg3, &arg4};
+argparse_arg_t args[] = {
+    ARGPARSE_COUNT('v', "--verbose", &verbosity, "verbosity level"),
+    ARGPARSE_OPTION(FLOAT, 'd', "--distance", &distance, "maximum distance for the trip"),
+    ARGPARSE_TOGGLE('r', "--reroute", &reroute, "whether the trip should be rerouted"),
+    ARGPARSE_POSITIONAL(STRING, "--file", &route_file, "name of file containing routes")
+};
 argparse_add_arguments(&parser, args, 4);
 ```
 

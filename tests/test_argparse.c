@@ -2744,15 +2744,13 @@ Test(argparse, add_arguments, .init = newlines) {
                  ARGPARSE_NO_ERROR);
 
     int x = 9999, y = 9999, z = 23, sum = -1;
-    argparse_arg_t arg1 =
-        ARGPARSE_OPTION(INT, 'x', "--value1", &x, "value to add");
-    argparse_arg_t arg2 =
-        ARGPARSE_OPTION(INT, 'y', "--value2", &y, "another value to add");
-    argparse_arg_t arg3 =
-        ARGPARSE_OPTION(INT, 'z', "--value3", &z, "yet another value to add");
-    argparse_arg_t arg4 = ARGPARSE_OPTION(INT, 's', "--sum", &sum, "the sum");
 
-    argparse_arg_t *args[] = {&arg1, &arg2, &arg3, &arg4};
+    argparse_arg_t args[] = {
+        ARGPARSE_OPTION(INT, 'x', "--value1", &x, "value to add"),
+        ARGPARSE_OPTION(INT, 'y', "--value2", &y, "another value to add"),
+        ARGPARSE_OPTION(INT, 'z', "--value3", &z, "yet another value to add"),
+        ARGPARSE_OPTION(INT, 's', "--sum", &sum, "the sum")
+    };
     cr_assert_eq(argparse_check_error(argparse_add_arguments(&parser, args, 4)),
                  ARGPARSE_NO_ERROR);
 
@@ -2765,8 +2763,8 @@ Test(argparse, add_arguments, .init = newlines) {
     cr_assert_eq(y, 42);
     cr_assert_eq(z, 23);
     cr_assert_eq(sum, 94);
-    cr_assert_eq(arg1.count_, 1);
-    cr_assert_eq(arg2.count_, 1);
-    cr_assert_eq(arg3.count_, 0);
-    cr_assert_eq(arg4.count_, 1);
+    cr_assert_eq(args[0].count_, 1);
+    cr_assert_eq(args[1].count_, 1);
+    cr_assert_eq(args[2].count_, 0);
+    cr_assert_eq(args[3].count_, 1);
 }

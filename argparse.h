@@ -222,14 +222,14 @@ argparse_error_t argparse_add_argument(argument_parser_t *parser,
  * @brief Adds multiple arguments to the parser
  *
  * @param parser Pointer to the parser
- * @param args Array of pointers to the arguments to add
+ * @param args Array of arguments to add
  * @param num_args The number of arguments in args
  * @return An `argparse_error_t` indicating success or failure
  *
  * @note All arguments should be initialised.
  */
 argparse_error_t argparse_add_arguments(argument_parser_t *parser,
-                                        argparse_arg_t **args, size_t num_args);
+                                        argparse_arg_t *args, size_t num_args);
 
 /**
  * @brief Parses the command-line arguments

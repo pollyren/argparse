@@ -387,11 +387,10 @@ argparse_error_t argparse_add_argument(argument_parser_t *parser,
 }
 
 argparse_error_t argparse_add_arguments(argument_parser_t *parser,
-                                        argparse_arg_t **args,
-                                        size_t num_args) {
+                                        argparse_arg_t *args, size_t num_args) {
     argparse_error_t error;
     for (size_t i = 0; i < num_args; i++) {
-        error = argparse_add_argument(parser, args[i]);
+        error = argparse_add_argument(parser, &args[i]);
         CHECK_ERROR(error);
     }
     return ARGPARSE_NO_ERROR();
